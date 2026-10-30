@@ -11,6 +11,13 @@ from requests import (
 )
 
 
+from quality import (
+    review_records,
+    valid_resolution,
+    correct_resolution,
+)
+
+
 def show_request(record):
     if record is None:
         print("\nRequest not found.")
@@ -197,6 +204,12 @@ def close_existing_request():
     if not resolution:
         raise ValueError("Resolution notes are required.")
 
+    if not valid_resolution(resolution):
+        raise ValueError(
+            "Resolution needs at least 15 characters "
+            "and 3 words."
+        )
+
     confirm = input("Confirm closure? (y/n): ").strip().lower()
 
     if confirm != "y":
@@ -207,6 +220,50 @@ def close_existing_request():
         print(f"\nSR-{request_id:04d} closed successfully.")
     else:
         print("\nRequest could not be closed.")
+
+
+
+def review_support_records():
+    total, findings = review_records()
+
+    print("\n--- RECORD VERIFICATION ---")
+    print(f"Records reviewed: {total}")
+    print(f"Records needing attention: {len(findings)}")
+
+    if not findings:
+        print("No validation issues found.")
+        return
+
+    for item in findings:
+        print(f"\nSR-{item['id']:04d}: {item['title']}")
+        for issue in item["issues"]:
+            print(f"  - {issue}")
+
+
+def correct_request_resolution():
+    print("\n--- CORRECT RESOLUTION ---")
+    request_id = read_id()
+    record = get_request(request_id)
+
+    if record is None:
+        print("Request not found.")
+        return
+
+    show_request(record)
+    resolution = input("Corrected resolution: ").strip()
+
+    if not valid_resolution(resolution):
+        raise ValueError(
+            "Enter at least 15 characters and 3 words."
+        )
+
+    confirm = input("Save correction? (y/n): ").strip().lower()
+    if confirm != "y":
+        print("Correction cancelled.")
+        return
+
+    if correct_resolution(request_id, resolution):
+        print("Resolution corrected successfully.")
 
 
 def main():
@@ -223,6 +280,8 @@ def main():
         print("[4] Update / Assign Request")
         print("[5] Close Request")
         print("[6] View Request History")
+        print("[7] Review Records")
+        print("[8] Correct Resolution")
         print("[0] Exit")
         print("-" * 48)
 
@@ -247,6 +306,12 @@ def main():
             elif choice == "6":
                 request_id = read_id()
                 show_history(request_id)
+
+            elif choice == "7":
+                review_support_records()
+
+            elif choice == "8":
+                correct_request_resolution()
 
             elif choice == "0":
                 print("\nExiting TOSS.")
