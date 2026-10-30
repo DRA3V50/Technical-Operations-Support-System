@@ -230,3 +230,7 @@ data/*.db-*
 
 # Local backups
 backups/
+
+# Generated reports and backups
+reports/
+backups/

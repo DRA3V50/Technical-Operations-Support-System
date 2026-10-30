@@ -266,6 +266,9 @@ def correct_request_resolution():
         print("Resolution corrected successfully.")
 
 
+from reporting import generate_report, export_report
+
+
 def main():
     initialize()
     initialize_history()
@@ -282,6 +285,8 @@ def main():
         print("[6] View Request History")
         print("[7] Review Records")
         print("[8] Correct Resolution")
+        print("[9] View Operational Report")
+        print("[10] Export Report")
         print("[0] Exit")
         print("-" * 48)
 
@@ -312,6 +317,13 @@ def main():
 
             elif choice == "8":
                 correct_request_resolution()
+
+            elif choice == "9":
+                print("\n" + generate_report())
+
+            elif choice == "10":
+                path = export_report()
+                print(f"\nReport saved: {path}")
 
             elif choice == "0":
                 print("\nExiting TOSS.")
