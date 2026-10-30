@@ -1,107 +1,38 @@
-# Technical-Operations-Support-System
-IT Support • Request Tracking • Records Management • Troubleshooting
+# Technical-Operations-Support-System (TOSS)
+**IT Support • Records Management • Troubleshooting • Workflow Tracking**
 
-Python • SQLite • Ubuntu • Windows 11
+`Python` · `SQLite` · `Ubuntu Linux` · `Windows 11`
 
-Overview
+---
 
-Technical Operations Support System (TOSS) is a Python-based application for handling IT support requests, managing records, and keeping track of day-to-day technical and administrative tasks.
+## Overview
 
-The project brings common support tasks into one place instead of relying on separate spreadsheets, notes, or manually updated files. It is designed to make it easier to report an issue, find information, track what has been done, and keep a clear record of how problems were handled.
+Technical Operations Support System (TOSS) is a Python-based application for managing IT support requests, tracking technical issues, and organizing operational records.
 
-TOSS focuses on the work that happens behind the scenes in IT support and office operations, from receiving a request to checking the details, fixing the issue, or passing it along to the right person.
+The system helps keep requests, updates, and resolutions in one place, making it easier to find information, follow up on issues, and maintain accurate records.
 
-What TOSS Does
+---
 
-▸ Support Requests & Triage
-Log incoming requests, set priorities, assign tasks, update their status, and flag issues that need further attention.
+## Key Features
 
-▸ Records Management
-Store and search support records, update information, and keep track of changes using SQLite.
+- **Request Management** — Create, assign, prioritize, and track support requests.
+- **Technical Support** — Document troubleshooting steps, solutions, and escalations.
+- **Records Management** — Store, search, update, and archive records using SQLite.
+- **Data Verification** — Check for missing information, duplicates, and errors.
+- **Reporting** — Track open requests, completed work, and pending tasks.
 
-▸ Troubleshooting & Issue Resolution
-Track common problems involving software, network connections, system access, and other technical issues. Record what was checked, what was fixed, and whether the issue was resolved.
+---
 
-▸ Record Checks & Auditing
-Check for missing details, duplicate entries, incorrect information, and records that need to be reviewed or updated.
+## Support Workflow
 
-▸ Reports & Follow-Ups
-View open requests, pending tasks, completed work, and issues that still need follow-up.
+`Request → Triage → Assign → Resolve / Escalate → Document → Close`
 
-How Requests Are Handled
+---
 
-     New Request
-          │
-          ▼
-    Review Details
-          │
-          ▼
-   Set Priority / Assign
-          │
-          ▼
-   Troubleshoot or Review
-          │
-          ▼
-    Resolve / Escalate
-          │
-          ▼
-    Update Records
-          │
-          ▼
-     Close Request
+## Development
 
-Each request is designed to have its own ID, description, priority, assigned person, status, and history of updates so that work can be followed from start to finish.
+**Status:** In Development
 
-Tools & Environment
+Built and tested locally using Python, Ubuntu, and Oracle VirtualBox. Initial development focuses on request tracking, database operations, and record validation.
 
-Tool
-
-How It's Used
-
-Python 3
-
-Main application and task handling
-
-SQLite
-
-Saving, updating, and searching records
-
-Ubuntu Linux
-
-Running and testing the application
-
-Windows 11
-
-Host computer and troubleshooting tests
-
-Oracle VirtualBox
-
-Testing in a separate virtual machine
-
-Current Progress
-
-Status: In Development
-
-The first version is focused on building a working request tracking system with Python and SQLite.
-
-Planned work includes:
-
-Create and manage support requests
-
-Save and retrieve records from SQLite
-
-Update request priorities and statuses
-
-Track changes and completed actions
-
-Check records for missing or incorrect information
-
-Add basic troubleshooting tools
-
-Generate reports for open and resolved requests
-
-Features will be marked complete as they are built and tested.
-
-Notes
-
-TOSS is being developed and tested locally using fictional support requests and records. It does not use real employee information or connect to company or government systems.
+All test records and support scenarios use fictional data.
