@@ -31,6 +31,7 @@ def initialize():
 
 def initialize_history():
     with connect() as db:
+        db.execute("DROP TRIGGER IF EXISTS log_request_updated")
         db.executescript("""
             CREATE TABLE IF NOT EXISTS request_history (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -67,7 +68,12 @@ def initialize_history():
                 VALUES (
                     NEW.id,
                     CASE
-                        WHEN NEW.status = 'Closed'
+                        WHEN OLD.status = 'Closed'
+                             AND NEW.status = 'Closed'
+                             AND OLD.resolution IS NOT NEW.resolution
+                        THEN 'Resolution Corrected'
+                        WHEN OLD.status != 'Closed'
+                             AND NEW.status = 'Closed'
                         THEN 'Closed'
                         ELSE 'Updated'
                     END,
