@@ -27,3 +27,55 @@ def initialize():
                 updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
             )
         """)
+
+
+def initialize_history():
+    with connect() as db:
+        db.executescript("""
+            CREATE TABLE IF NOT EXISTS request_history (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                request_id INTEGER NOT NULL,
+                action TEXT NOT NULL,
+                details TEXT NOT NULL,
+                recorded_at TEXT NOT NULL
+                    DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (request_id)
+                    REFERENCES requests(id)
+            );
+
+            CREATE TRIGGER IF NOT EXISTS log_request_created
+            AFTER INSERT ON requests
+            BEGIN
+                INSERT INTO request_history
+                    (request_id, action, details)
+                VALUES (
+                    NEW.id,
+                    'Created',
+                    'Priority: ' || NEW.priority ||
+                    ' | Status: ' || NEW.status
+                );
+            END;
+
+            CREATE TRIGGER IF NOT EXISTS log_request_updated
+            AFTER UPDATE ON requests
+            WHEN OLD.status IS NOT NEW.status
+              OR OLD.assigned_to IS NOT NEW.assigned_to
+              OR OLD.resolution IS NOT NEW.resolution
+            BEGIN
+                INSERT INTO request_history
+                    (request_id, action, details)
+                VALUES (
+                    NEW.id,
+                    CASE
+                        WHEN NEW.status = 'Closed'
+                        THEN 'Closed'
+                        ELSE 'Updated'
+                    END,
+                    'Status: ' || OLD.status ||
+                    ' -> ' || NEW.status ||
+                    ' | Assigned: ' || NEW.assigned_to ||
+                    ' | Resolution: ' ||
+                    COALESCE(NULLIF(NEW.resolution, ''), 'None')
+                );
+            END;
+        """)

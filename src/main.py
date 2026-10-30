@@ -1,10 +1,10 @@
-from database import initialize
+from database import initialize, initialize_history
 from requests import (
     PRIORITIES, STATUSES,
     create_request, list_requests,
     get_request, update_request, close_request
 )
-
+from requests import get_request_history
 
 def show_request(record):
     if record is None:
@@ -27,6 +27,7 @@ def read_id():
 
 def main():
     initialize()
+    initialize_history()
 
     while True:
         print("\n" + "=" * 42)
@@ -37,6 +38,7 @@ def main():
         print("[3] Search Request")
         print("[4] Update / Assign Request")
         print("[5] Close Request")
+        print("[6] View Request History")
         print("[0] Exit")
 
         choice = input("\nSelect option: ").strip()
@@ -88,6 +90,22 @@ def main():
                     print("Request closed.")
                 else:
                     print("Request not found.")
+            elif choice == "6":
+                request_id = read_id()
+                history = get_request_history(request_id)
+
+                if not history:
+                    print("\nNo history recorded.")
+                else:
+                    print(f"\nHistory for SR-{request_id:04d}")
+                    print("-" * 45)
+
+                    for entry in history:
+                        print(
+                            f"{entry['recorded_at']} | "
+                            f"{entry['action']}"
+                        )
+                        print(f"  {entry['details']}")
 
             elif choice == "0":
                 print("Exiting TOSS.")

@@ -65,3 +65,13 @@ def close_request(request_id, resolution):
             WHERE id = ?
         """, (resolution.strip(), request_id))
         return cursor.rowcount > 0
+
+
+def get_request_history(request_id):
+    with connect() as db:
+        return db.execute("""
+            SELECT action, details, recorded_at
+            FROM request_history
+            WHERE request_id = ?
+            ORDER BY id ASC
+        """, (request_id,)).fetchall()
