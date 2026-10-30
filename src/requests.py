@@ -53,10 +53,26 @@ def update_request(request_id, status, assigned_to):
 
 
 def close_request(request_id, resolution):
-    if not resolution.strip():
-        raise ValueError("A resolution is required.")
+    from quality import valid_resolution
+
+    if not valid_resolution(resolution):
+        raise ValueError(
+            "Resolution requires at least 15 characters "
+            "and 3 words."
+        )
 
     with connect() as db:
+        record = db.execute(
+            "SELECT status FROM requests WHERE id = ?",
+            (request_id,)
+        ).fetchone()
+
+        if record is None:
+            return False
+
+        if record["status"] == "Closed":
+            raise ValueError("This request is already closed.")
+
         cursor = db.execute("""
             UPDATE requests
             SET status = 'Closed',
@@ -64,6 +80,7 @@ def close_request(request_id, resolution):
                 updated_at = CURRENT_TIMESTAMP
             WHERE id = ?
         """, (resolution.strip(), request_id))
+
         return cursor.rowcount > 0
 
 

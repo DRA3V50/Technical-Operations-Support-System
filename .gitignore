@@ -234,3 +234,11 @@ backups/
 # Generated reports and backups
 reports/
 backups/
+
+# Local TOSS files
+backups/
+reports/
+data/*.db
+data/*.db-*
+__pycache__/
+*.pyc
