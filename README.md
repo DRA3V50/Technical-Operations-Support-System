@@ -36,3 +36,19 @@ The system helps keep requests, updates, and resolutions in one place, making it
 Built and tested locally using Python, Ubuntu, and Oracle VirtualBox. Initial development focuses on request tracking, database operations, and record validation.
 
 All test records and support scenarios use fictional data.
+
+---
+
+## Application Preview
+
+**Main Menu**
+
+![TOSS Main Menu](screenshots/main-menu.png)
+
+**Request History**
+
+![TOSS Request History](screenshots/request-history.png)
+
+**Operational Report**
+
+![TOSS Operational Report](screenshots/operational-report.png)
