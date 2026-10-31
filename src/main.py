@@ -1,5 +1,5 @@
 from database import initialize, initialize_history
-from requests import (
+from request_service import (
     PRIORITIES,
     STATUSES,
     create_request,

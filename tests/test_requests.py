@@ -9,7 +9,7 @@ sys.path.insert(
 
 import database
 from database import initialize, initialize_history
-from requests import (
+from request_service import (
     create_request,
     get_request,
     list_requests,
