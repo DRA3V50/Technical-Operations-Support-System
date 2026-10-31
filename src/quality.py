@@ -1,5 +1,5 @@
 from database import connect
-from requests import PRIORITIES, STATUSES
+from request_service import PRIORITIES, STATUSES
 
 MIN_RESOLUTION_LENGTH = 15
 
