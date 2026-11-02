@@ -39,16 +39,34 @@ def update_request(request_id, status, assigned_to):
     if status not in STATUSES:
         raise ValueError("Invalid status.")
 
-    if not assigned_to.strip():
+    if status == "Closed":
+        raise ValueError(
+            "Use the close request process to close a ticket "
+            "with resolution notes."
+        )
+
+    if not isinstance(assigned_to, str) or not assigned_to.strip():
         raise ValueError("Assignee is required.")
 
     with connect() as db:
+        record = db.execute(
+            "SELECT status FROM requests WHERE id = ?",
+            (request_id,)
+        ).fetchone()
+
+        if record is None:
+            return False
+
+        if record["status"] == "Closed":
+            raise ValueError("Closed requests cannot be modified.")
+
         cursor = db.execute("""
             UPDATE requests
             SET status = ?, assigned_to = ?,
                 updated_at = CURRENT_TIMESTAMP
             WHERE id = ?
         """, (status, assigned_to.strip(), request_id))
+
         return cursor.rowcount > 0
 
 

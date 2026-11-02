@@ -150,8 +150,12 @@ def assign_request():
 
     show_request(record)
 
+    available_statuses = [
+        status for status in STATUSES if status != "Closed"
+    ]
+
     print("\nAvailable statuses:")
-    for index, status in enumerate(STATUSES, start=1):
+    for index, status in enumerate(available_statuses, start=1):
         print(f"[{index}] {status}")
 
     selection = input("\nSelect status (number or name): ").strip()
@@ -159,14 +163,14 @@ def assign_request():
     if selection.isdigit():
         number = int(selection)
 
-        if 1 <= number <= len(STATUSES):
-            status = STATUSES[number - 1]
+        if 1 <= number <= len(available_statuses):
+            status = available_statuses[number - 1]
         else:
             raise ValueError("Invalid status selection.")
     else:
         status = next(
             (
-                item for item in STATUSES
+                item for item in available_statuses
                 if item.lower() == selection.lower()
             ),
             None,

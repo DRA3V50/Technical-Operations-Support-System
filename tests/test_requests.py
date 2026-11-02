@@ -79,6 +79,35 @@ class TestSupportRequests(unittest.TestCase):
         self.assertEqual(record["status"], "Assigned")
         self.assertEqual(record["assigned_to"], "IT Technician")
 
+    def test_update_cannot_close_request_directly(self):
+        request_id = self.create_sample()
+
+        with self.assertRaises(ValueError):
+            update_request(
+                request_id, "Closed", "IT Technician"
+            )
+
+        self.assertEqual(
+            get_request(request_id)["status"], "Open"
+        )
+
+    def test_closed_request_cannot_be_updated(self):
+        request_id = self.create_sample()
+
+        close_request(
+            request_id,
+            "Access restored after permissions were corrected."
+        )
+
+        with self.assertRaises(ValueError):
+            update_request(
+                request_id, "Assigned", "IT Technician"
+            )
+
+        record = get_request(request_id)
+        self.assertEqual(record["status"], "Closed")
+        self.assertEqual(record["assigned_to"], "Unassigned")
+
     def test_nonexistent_request(self):
         self.assertIsNone(get_request(9999))
         self.assertFalse(
