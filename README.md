@@ -1,31 +1,63 @@
 # Technical-Operations-Support-System (TOSS)
+
 **IT Support • Records Management • Troubleshooting • Workflow Tracking**
 
-`Python` · `SQLite` · `Ubuntu Linux` · `Windows 11`
+`Python` · `SQLite` · `Streamlit` · `Plotly`
 
 ---
 
 ## Overview
 
-Technical Operations Support System (TOSS) is a Python-based application for managing IT support requests, tracking technical issues, and organizing operational records.
+Technical Operations Support System (TOSS) is a Python-based application for managing IT support requests, tracking technical issues, and maintaining operational records.
 
-The system helps keep requests, updates, and resolutions in one place, making it easier to find information, follow up on issues, and maintain accurate records.
+It provides a centralized way to create requests, assign work, document troubleshooting, track progress, and record resolutions.
 
 ---
 
 ## Key Features
 
-- **Request Management** — Create, assign, prioritize, and track support requests.
-- **Technical Support** — Document troubleshooting steps, solutions, and escalations.
-- **Records Management** — Store, search, update, and archive records using SQLite.
-- **Data Verification** — Check for missing information, duplicates, and errors.
-- **Reporting** — Track open requests, completed work, and pending tasks.
+- **Request Management** — Create, search, assign, prioritize, and track support requests.
+- **Ticket Workflow** — Move requests through statuses from open to resolved or escalated.
+- **Troubleshooting Records** — Document resolution notes and maintain request history.
+- **Data Management** — Store and retrieve support records using SQLite.
+- **Operational Reporting** — Review request activity, status breakdowns, and workload through dashboard charts.
+- **Data Verification** — Check records for missing information, duplicates, and errors.
 
 ---
 
 ## Support Workflow
 
-`Request → Triage → Assign → Resolve / Escalate → Document → Close`
+`Request → Triage → Assign → Troubleshoot → Resolve / Escalate → Document → Close`
+
+---
+
+## Running the Dashboard
+
+Install the project dependencies:
+
+```bash
+python3 -m pip install -r requirements.txt
+```
+
+Start the dashboard:
+
+```bash
+streamlit run src/dashboard.py
+```
+
+Open the local URL displayed in the terminal.
+
+For CLI instructions, see [docs/USAGE.md](docs/USAGE.md).
+
+---
+
+## Testing
+
+Run the automated tests:
+
+```bash
+python3 -m unittest discover -s tests -v
+```
 
 ---
 
@@ -33,9 +65,9 @@ The system helps keep requests, updates, and resolutions in one place, making it
 
 **Status:** In Development
 
-Built and tested locally using Python, Ubuntu, and Oracle VirtualBox. Initial development focuses on request tracking, database operations, and record validation.
+Developed and tested locally using Python, SQLite, Ubuntu Linux, and Windows 11.
 
-All test records and support scenarios use fictional data.
+All sample requests and support scenarios use fictional data.
 
 ---
 

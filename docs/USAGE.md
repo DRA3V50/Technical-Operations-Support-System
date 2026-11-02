@@ -42,3 +42,22 @@ python3 -m unittest discover -s tests -v
 ## Notes
 
 All sample requests are fictional. Local databases, generated reports, and backup files are excluded from version control.
+
+## Web Dashboard
+
+The project also includes a Streamlit dashboard for managing support requests.
+
+Launch it with:
+
+```bash
+streamlit run src/dashboard.py
+```
+Open the local URL displayed in the terminal.
+
+The dashboard supports:
+- Creating and searching support requests
+- Assigning requests to technicians
+- Updating request status and priority
+- Recording resolution notes
+- Reviewing request history
+- Viewing operational reports and charts
