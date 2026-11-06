@@ -290,6 +290,125 @@ def render_dashboard():
 
     st.divider()
 
+    # System Health Monitoring
+    st.subheader("System Health Monitoring")
+
+    import sqlite3
+    import time
+    from datetime import datetime
+    from monitor_store import DB_PATH
+
+    readings = []
+
+    if DB_PATH.exists():
+        try:
+            with sqlite3.connect(DB_PATH) as db:
+                readings = db.execute("""
+                    SELECT observed_at, cpu_percent,
+                           memory_percent, disk_percent
+                    FROM system_metrics
+                    ORDER BY observed_at DESC, id DESC
+                    LIMIT 400
+                """).fetchall()
+        except sqlite3.Error as error:
+            st.warning(f"Monitoring data unavailable: {error}")
+
+    if readings:
+        readings.reverse()
+        latest = readings[-1]
+
+        observed_at, cpu, memory, disk = latest
+        age_minutes = max(
+            0, (time.time() - observed_at) / 60
+        )
+
+        if age_minutes > 75:
+            st.warning(
+                "Monitoring data is outdated. "
+                "Check the TOSS background service."
+            )
+        else:
+            st.caption("Ubuntu WSL monitoring is active.")
+
+        health1, health2, health3 = st.columns(3)
+
+        health1.metric("CPU Usage", f"{cpu:.1f}%")
+        health2.metric("Memory Usage", f"{memory:.1f}%")
+        health3.metric("Disk Usage", f"{disk:.1f}%")
+
+        last_check = datetime.fromtimestamp(
+            observed_at
+        ).strftime("%b %d, %Y at %I:%M %p")
+
+        st.caption(
+            f"Last measurement: {last_check} "
+            f"(Ubuntu local time) · "
+            f"{len(readings)} stored readings"
+        )
+
+        if cpu >= 95 or memory >= 90 or disk >= 90:
+            st.warning(
+                "One or more measurements exceed "
+                "the monitoring thresholds."
+            )
+
+        history = pd.DataFrame(
+            readings,
+            columns=[
+                "Timestamp", "CPU",
+                "Memory", "Disk"
+            ]
+        )
+
+        history["Timestamp"] = history["Timestamp"].map(
+            datetime.fromtimestamp
+        )
+
+        fig = px.line(
+            history,
+            x="Timestamp",
+            y=["CPU", "Memory", "Disk"],
+            title="System Resource History",
+            labels={
+                "value": "Usage (%)",
+                "variable": "Resource"
+            },
+            color_discrete_map={
+                "CPU": "#3b82f6",
+                "Memory": "#0f766e",
+                "Disk": "#f59e0b"
+            }
+        )
+
+        fig.update_layout(
+            paper_bgcolor="#ffffff",
+            plot_bgcolor="#ffffff",
+            font=dict(color="#334155", size=12),
+            title_font=dict(color="#102a43", size=16),
+            margin=dict(l=20, r=20, t=55, b=20),
+            height=340,
+            legend_title_text=""
+        )
+
+        fig.update_yaxes(
+            range=[0, 100],
+            gridcolor="#e8edf3"
+        )
+
+        st.plotly_chart(fig, width="stretch")
+
+    else:
+        st.info(
+            "No monitoring readings available yet."
+        )
+
+    st.caption(
+        "System measurements are collected every 30 minutes. "
+        "These readings describe Ubuntu WSL, not the entire Windows PC."
+    )
+
+    st.divider()
+
     # Request filters
     st.subheader("Support Request Records")
 
