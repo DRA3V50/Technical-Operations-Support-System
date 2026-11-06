@@ -80,17 +80,3 @@ All sample requests and support scenarios use fictional data.
 ### Ticket Management and Request History
 
 ![TOSS Ticket Management](screenshots/ticket-management.png)
-
-### CLI and Operational Reports
-
-**Main Menu**
-
-![TOSS Main Menu](screenshots/main-menu.png)
-
-**Request History**
-
-![TOSS Request History](screenshots/request-history.png)
-
-**Operational Report**
-
-![TOSS Operational Report](screenshots/operational-report.png)
