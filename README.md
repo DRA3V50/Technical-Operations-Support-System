@@ -22,6 +22,9 @@ It provides a centralized way to create requests, assign work, document troubles
 - **Data Management** — Store and retrieve support records using SQLite.
 - **Operational Reporting** — Review request activity, status breakdowns, and workload through dashboard charts.
 - **Data Verification** — Check records for missing information, duplicates, and errors.
+- **Automated Monitoring** — Track Ubuntu WSL CPU, memory, and disk usage.
+- **Incident Detection** — Create tickets for sustained resource issues without duplicate active alerts.
+- **System Health Dashboard** — View resource usage and monitoring history.
 
 ---
 
@@ -48,6 +51,17 @@ streamlit run src/dashboard.py
 Open the local URL displayed in the terminal.
 
 For CLI instructions, see [docs/USAGE.md](docs/USAGE.md).
+
+---
+
+## System Monitoring
+
+TOSS monitors Ubuntu WSL resources every 30 minutes using a systemd user timer.
+Sustained resource issues can automatically create support tickets.
+
+Manual check: `python3 src/monitor_alerts.py`
+
+Monitoring history is limited to 7 days and 400 records. Checks run while WSL is active.
 
 ---
 
