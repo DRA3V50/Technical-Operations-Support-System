@@ -73,6 +73,16 @@ All sample requests and support scenarios use fictional data.
 
 ## Application Preview
 
+### Live Operations Dashboard
+
+![TOSS Dashboard Overview](screenshots/dashboard-overview.png)
+
+### Ticket Management and Request History
+
+![TOSS Ticket Management](screenshots/ticket-management.png)
+
+### CLI and Operational Reports
+
 **Main Menu**
 
 ![TOSS Main Menu](screenshots/main-menu.png)

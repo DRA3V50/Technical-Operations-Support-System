@@ -43,12 +43,125 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("Technical Operations Support System")
-st.caption(
-    "IT Support Management | Live Operational Dashboard"
+st.markdown(
+    """
+    <style>
+    .stApp { background-color: #f3f6fb; }
+    [data-testid="stHeader"] { background: transparent; }
+    .block-container {
+        max-width: 1560px;
+        padding-top: 1.8rem;
+        padding-bottom: 2rem;
+    }
+    .toss-hero {
+        padding: 1.9rem 2rem;
+        margin-bottom: 1.5rem;
+        border-radius: 20px;
+        background: linear-gradient(
+            120deg, #10243e 0%, #173f5f 60%, #0f766e 100%
+        );
+        box-shadow: 0 8px 24px rgba(16, 36, 62, 0.14);
+        color: white;
+    }
+    .toss-kicker {
+        color: #a9d5d8;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        margin-bottom: 0.65rem;
+    }
+    .toss-heading {
+        color: #ffffff;
+        font-size: 2.15rem;
+        font-weight: 750;
+        line-height: 1.15;
+    }
+    .toss-subheading {
+        color: #d7e5f0;
+        font-size: 0.98rem;
+        margin-top: 0.55rem;
+    }
+    .toss-live {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.55rem;
+        margin-top: 1.1rem;
+        padding: 0.4rem 0.8rem;
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 30px;
+        background: rgba(255,255,255,0.1);
+        color: #e2f7ef;
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.06em;
+    }
+    .toss-live-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #5ee0a0;
+        display: inline-block;
+    }
+    div[data-testid="stMetric"] {
+        background: #ffffff;
+        border: 1px solid #e5ebf3;
+        border-radius: 16px;
+        padding: 1rem 1.15rem;
+        min-height: 112px;
+        box-shadow: 0 4px 14px rgba(20, 40, 70, 0.05);
+    }
+    div[data-testid="stMetricLabel"] p {
+        color: #64748b;
+        font-size: 0.82rem;
+        font-weight: 650;
+    }
+    div[data-testid="stMetricValue"] {
+        color: #102a43;
+        font-weight: 750;
+    }
+    h2, h3 { color: #102a43; }
+    div[data-testid="stExpander"] {
+        background: #ffffff;
+        border: 1px solid #e5ebf3;
+        border-radius: 14px;
+    }
+    div[data-testid="stDataFrame"] {
+        border: 1px solid #e5ebf3;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+    .stButton > button,
+    div[data-testid="stFormSubmitButton"] button {
+        border-radius: 10px;
+        font-weight: 650;
+    }
+    hr { border-color: #e4eaf2; }
+    </style>
+    """,
+    unsafe_allow_html=True,
 )
 
-st.divider()
+st.markdown(
+    """
+    <div class="toss-hero">
+        <div class="toss-kicker">
+            IT SERVICE MANAGEMENT · OPERATIONS CENTER
+        </div>
+        <div class="toss-heading">
+            Technical Operations Support
+        </div>
+        <div class="toss-subheading">
+            A live view of service requests, incident priorities,
+            and support activity.
+        </div>
+        <div class="toss-live">
+            <span class="toss-live-dot"></span>
+            LIVE OPERATIONAL DATA
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
 
 def refresh_with_message(message):
@@ -73,19 +186,23 @@ def render_dashboard():
     total = len(records)
     closed = sum(r["status"] == "Closed" for r in records)
     outstanding = total - closed
-    open_count = sum(r["status"] == "Open" for r in records)
     progress = sum(
         r["status"] == "In Progress" for r in records
+    )
+    critical_active = sum(
+        r["priority"] == "Critical" and r["status"] != "Closed"
+        for r in records
     )
 
     st.subheader("Operational Overview")
 
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3, col4, col5 = st.columns(5)
 
     col1.metric("Total Requests", total)
-    col2.metric("Outstanding", outstanding)
-    col3.metric("Open Requests", open_count)
-    col4.metric("Closed Requests", closed)
+    col2.metric("Active Requests", outstanding)
+    col3.metric("Critical Active", critical_active)
+    col4.metric("In Progress", progress)
+    col5.metric("Closed Requests", closed)
 
     st.caption("Dashboard data refreshes automatically every 15 seconds.")
 
@@ -123,6 +240,19 @@ def render_dashboard():
                 hole=0.45,
                 title="Requests by Status"
             )
+            fig.update_traces(
+                textfont_color="#ffffff",
+                marker_line_color="#ffffff",
+                marker_line_width=2
+            )
+            fig.update_layout(
+                paper_bgcolor="#ffffff",
+                plot_bgcolor="#ffffff",
+                font=dict(color="#334155", family="Arial", size=12),
+                title_font=dict(color="#102a43", size=16),
+                margin=dict(l=20, r=20, t=55, b=20),
+                height=340
+            )
             st.plotly_chart(fig, width="stretch")
 
         with chart2:
@@ -131,7 +261,28 @@ def render_dashboard():
                 x="Priority",
                 y="Requests",
                 color="Priority",
+                color_discrete_map={
+                    "Low": "#0f766e",
+                    "Medium": "#3b82f6",
+                    "High": "#f59e0b",
+                    "Critical": "#dc2626"
+                },
                 title="Requests by Priority"
+            )
+            fig.update_layout(
+                paper_bgcolor="#ffffff",
+                plot_bgcolor="#ffffff",
+                font=dict(color="#334155", family="Arial", size=12),
+                title_font=dict(color="#102a43", size=16),
+                margin=dict(l=20, r=20, t=55, b=20),
+                height=340
+            )
+            fig.update_xaxes(showgrid=False)
+            fig.update_yaxes(
+                showgrid=True,
+                gridcolor="#e8edf3",
+                zeroline=False,
+                rangemode="tozero"
             )
             st.plotly_chart(fig, width="stretch")
     else:
