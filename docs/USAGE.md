@@ -13,7 +13,7 @@ git clone https://github.com/DRA3V50/Technical-Operations-Support-System.git
 cd Technical-Operations-Support-System
 python3 -m venv .venv
 source .venv/bin/activate
-python3 src/main.py
+python3 app/main.py
 ```
 
 The application initializes its local SQLite database when launched.
@@ -50,7 +50,7 @@ The project also includes a Streamlit dashboard for managing support requests.
 Launch it with:
 
 ```bash
-streamlit run src/dashboard.py
+streamlit run app/dashboard.py
 ```
 Open the local URL displayed in the terminal.
 

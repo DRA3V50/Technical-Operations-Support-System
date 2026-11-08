@@ -45,7 +45,7 @@ python3 -m pip install -r requirements.txt
 Start the dashboard:
 
 ```bash
-streamlit run src/dashboard.py
+streamlit run app/dashboard.py
 ```
 
 Open the local URL displayed in the terminal.
@@ -59,7 +59,7 @@ For CLI instructions, see [docs/USAGE.md](docs/USAGE.md).
 TOSS monitors Ubuntu WSL resources every 30 minutes using a systemd user timer.
 Sustained resource issues can automatically create support tickets.
 
-Manual check: `python3 src/monitor_alerts.py`
+Manual check: `python3 app/monitor_alerts.py`
 
 Monitoring history is limited to 7 days and 400 records. Checks run while WSL is active.
 
