@@ -56,11 +56,8 @@ For CLI instructions, see [docs/USAGE.md](docs/USAGE.md).
 
 ## System Monitoring
 
-TOSS monitors Ubuntu WSL resources every 30 minutes using a systemd user timer.
-Sustained resource issues can automatically create support tickets.
-
+Optional Ubuntu WSL resource monitoring with automated incident detection and ticket creation. Monitoring runs only when explicitly configured and enabled.
 Manual check: `python3 app/monitor_alerts.py`
-
 Monitoring history is limited to 7 days and 400 records. Checks run while WSL is active.
 
 ---
